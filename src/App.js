@@ -37,8 +37,23 @@ class App extends Component {
     });
   };
 
-  handleAddRandom() {
-    console.log('add random card');
+  handleAddRandom = (id) => {
+    let newRandom = this.newRandomCard();
+      const newAllCards = {
+        ...this.state.allCards,
+        [newRandom.id] : newRandom
+      }
+      this.setState({
+        lists: this.state.lists.map(list => {
+          if(list.id === id) {
+            const current = list.cardIds;
+            current.push(newRandom.id);
+            return {...list, cardIds: current}
+          } else return list;
+        })
+        ,
+        allCards: newAllCards
+      })
   }
 
   newRandomCard = () => {
@@ -74,6 +89,7 @@ class App extends Component {
         <div className="App-list">
           {lists.map(list => (
             <List
+              id={list.id}
               key={list.id}
               header={list.header}
               cards={list.cardIds.map(id => allCards[id])}
